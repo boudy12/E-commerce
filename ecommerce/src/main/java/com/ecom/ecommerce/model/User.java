@@ -54,8 +54,9 @@ public class User implements UserDetails{
 	private Cart cart;
 	
 	
+	private boolean emailConfirmation;
 	
-	
+	private String confirmationCode;
 	
 	
 	@Override

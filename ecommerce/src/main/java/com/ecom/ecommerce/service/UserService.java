@@ -10,6 +10,6 @@ public interface UserService {
 	public User getUserByEmail(String email);
 	
 	public void changePassword(String email, ChangePasswordRequest request);
-
-
+	public void confirmEmail(String email, String code);
+	public String generateConfirmationCode();
 }

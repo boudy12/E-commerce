@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.ecom.ecommerce.model.Order;
+import com.ecom.ecommerce.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,10 +29,24 @@ public class EmailService {
 	public void sendOrderConfirmation(Order order) {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		
-		simpleMailMessage.setFrom(formEmail);
+		simpleMailMessage.setFrom("bodynafea2@gmail.com");
 		simpleMailMessage.setTo(order.getUser().getEmail());
 		simpleMailMessage.setSubject("Order Confirmation");
 		simpleMailMessage.setText("Your order has been Confirmed . Order ID : " + order.getId());
 		javaMailSender.send(simpleMailMessage);
+		
+	}
+	
+	
+	public void sendConfirmationCode(User user) {
+		
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		
+		simpleMailMessage.setFrom("bodynafea2@gmail.com");
+		simpleMailMessage.setTo(user.getEmail());
+		simpleMailMessage.setSubject("Confirmation your email ..");
+		simpleMailMessage.setText("Please confirm your email by entering this code : " + user.getConfirmationCode());
+		javaMailSender.send(simpleMailMessage);
+		
 	}
 }

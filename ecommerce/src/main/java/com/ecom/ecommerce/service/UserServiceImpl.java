@@ -1,6 +1,7 @@
 package com.ecom.ecommerce.service;
 
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,11 +18,13 @@ public class UserServiceImpl implements UserService{
 
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
+	private EmailService emailService;
 	
 	@Autowired
-	public UserServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserRepository userRepository,PasswordEncoder passwordEncoder, EmailService emailService) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -32,7 +35,9 @@ public class UserServiceImpl implements UserService{
 		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setRole(User.Role.USER);
-		
+		user.setConfirmationCode(generateConfirmationCode());
+		user.setEmailConfirmation(false);
+		emailService.sendConfirmationCode(user);
 		userRepository.save(user);
 		return user;
 	}
@@ -56,5 +61,24 @@ public class UserServiceImpl implements UserService{
 		
 	}
 	
+	@Override
+	public void confirmEmail(String email, String code) {
+		User user = userRepository.findByEmail(email).orElseThrow(
+				()-> new ResourceNotFoundException("User not found !"));
+		if(user.getConfirmationCode().equals(code)) {
+			user.setConfirmationCode(null);
+			user.setEmailConfirmation(true);
+			userRepository.save(user);
+		}else {
+			throw new BadCredentialsException("Invalid confirmation code");
+		}
+	}
+	
+	@Override
+	public String generateConfirmationCode() {
+		Random random = new Random();
+		int code = 10000 + random.nextInt(90000);
+		return String.valueOf(code);
+	}
 	
 }
