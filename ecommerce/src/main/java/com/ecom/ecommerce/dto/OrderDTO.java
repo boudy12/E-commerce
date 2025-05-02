@@ -1,5 +1,6 @@
 package com.ecom.ecommerce.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,14 +19,17 @@ public class OrderDTO {
 	
 	@NotBlank(message = "Address is required")
 	private String address;
-	
+		
 	@NotBlank(message = "Phone number is required")
 	private String phoneNumber;
 	
 	@NotNull(message = "Order status is required")
 	private Order.OrderStatus status;
 	
+	
 	private LocalDateTime createdAt;
 	
+	private BigDecimal totalPrice;
+
 	private List<OrderItemDTO> orderItems;
 }
