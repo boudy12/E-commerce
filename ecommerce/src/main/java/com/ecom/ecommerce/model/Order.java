@@ -1,5 +1,6 @@
 package com.ecom.ecommerce.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,8 @@ public class Order {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
 	
+	private BigDecimal totalPrice;
+
 	private LocalDateTime createdAt;
 	
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,orphanRemoval = true)

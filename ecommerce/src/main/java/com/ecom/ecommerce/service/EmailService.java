@@ -32,8 +32,9 @@ public class EmailService {
 		simpleMailMessage.setFrom("bodynafea2@gmail.com");
 		simpleMailMessage.setTo(order.getUser().getEmail());
 		simpleMailMessage.setSubject("Order Confirmation");
-		simpleMailMessage.setText("Your order has been Confirmed . Order ID : " + order.getId());
+		simpleMailMessage.setText("Your order has been Confirmed . Order ID : " + order.getId() + " , and total price is "+ order.getTotalPrice());
 		javaMailSender.send(simpleMailMessage);
+
 		
 	}
 	
@@ -48,6 +49,19 @@ public class EmailService {
 		simpleMailMessage.setSubject("Confirmation your email ..");
 		simpleMailMessage.setText("Please confirm your email by entering this code : " + user.getConfirmationCode());
 		javaMailSender.send(simpleMailMessage);
+		
+	}
+	
+	public void chabgeOrderStatus(Order order, Order.OrderStatus status) {
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		
+		message.setTo(order.getUser().getEmail());
+		message.setSubject("Order Updated..");
+		message.setFrom(formEmail);
+		message.setText("Order Status changed to " + status);
+		
+		javaMailSender.send(message);
 		
 	}
 }

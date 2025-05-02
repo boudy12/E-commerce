@@ -1,5 +1,6 @@
 package com.ecom.ecommerce.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,6 +73,12 @@ public class OrderService {
 		
 		order.setItems(orderItems);
 		
+		BigDecimal totalPrice = orderItems.stream()
+			    .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+			    .reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+
+		order.setTotalPrice(totalPrice);
 		Order savedOrder = orderRepository.save(order);
 		cartService.clearCart(userId);
 		
@@ -121,7 +128,7 @@ public class OrderService {
 	    order.setStatus(status);
 	    
 	    Order savedOrder = orderRepository.save(order);
-	    
+	    emailService.chabgeOrderStatus(savedOrder, status);
 	    return orderMapper.toDTO(savedOrder);
 	}
 }
