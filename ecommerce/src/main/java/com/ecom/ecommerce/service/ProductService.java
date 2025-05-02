@@ -13,29 +13,32 @@ import com.ecom.ecommerce.dto.ProductDTO;
 import com.ecom.ecommerce.dto.ProductListDTO;
 import com.ecom.ecommerce.exception.ResourceNotFoundException;
 import com.ecom.ecommerce.mapper.ProductMapper;
+import com.ecom.ecommerce.model.Category;
 import com.ecom.ecommerce.model.Product;
+import com.ecom.ecommerce.repository.CategoryRepository;
 import com.ecom.ecommerce.repository.ProductRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 	
-	private ProductRepository productRepository;
-	
-	private ProductMapper productMapper;
+	private final ProductRepository productRepository;
+	private final CategoryRepository categoryRepository;
+	private final ProductMapper productMapper;
 	
 	private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 	
-	@Autowired
-	public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
-		this.productRepository = productRepository;
-		this.productMapper = productMapper;
-	}
+
 	
 	
 	@Transactional
 	public ProductDTO createProduct(ProductDTO productDTO, MultipartFile image) throws Exception{
+		Category category = categoryRepository.findById(productDTO.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
+		
         Product product = productMapper.toEntity(productDTO);
         if (image != null && !image.isEmpty()) {
             try {

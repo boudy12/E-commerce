@@ -9,11 +9,13 @@ import com.ecom.ecommerce.model.Comment;
 import com.ecom.ecommerce.model.Product;
 
 @Mapper(componentModel = "spring")
-public interface ProductMapper {
+public interface ProductMapper {	
 
+    @Mapping(target = "categoryId",  source = "category.id")
 	@Mapping(target = "image", source = "image")
 	ProductDTO toDTO(Product product);
 	
+    @Mapping(target = "category.id",  source = "categoryId")
 	@Mapping(target = "image", source = "image")
 	Product toEntity(ProductDTO productDTO);
 	

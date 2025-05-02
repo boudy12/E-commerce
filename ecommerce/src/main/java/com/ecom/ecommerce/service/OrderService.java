@@ -76,8 +76,8 @@ public class OrderService {
 		BigDecimal totalPrice = orderItems.stream()
 			    .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
 			    .reduce(BigDecimal.ZERO, BigDecimal::add);
-		
 		order.setTotalPrice(totalPrice);
+		
 		Order savedOrder = orderRepository.save(order);
 		cartService.clearCart(userId);
 		

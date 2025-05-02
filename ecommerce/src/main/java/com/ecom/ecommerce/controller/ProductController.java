@@ -31,14 +31,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductController {
 
-	private ProductService productService;
+	private final ProductService productService;
 	
 	
-	@Autowired
-	public ProductController(ProductService productService) {
-		this.productService = productService;
-	}
-	
+
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ProductDTO> createProduct(@RequestPart("product") @Valid ProductDTO productDTO, 

@@ -31,5 +31,8 @@ public class ProductDTO {
     
     private String image;
     
+    @NotNull(message = "Category ID is required")
+    private Long categoryId;
+    
     private List<CommentDTO> comments;
 }
