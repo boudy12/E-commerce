@@ -38,6 +38,7 @@ public class EmailService {
 	}
 	
 	
+	
 	public void sendConfirmationCode(User user) {
 		
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
