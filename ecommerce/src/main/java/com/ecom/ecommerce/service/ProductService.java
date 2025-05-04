@@ -29,6 +29,8 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final CategoryRepository categoryRepository;
 	private final ProductMapper productMapper;
+	private final ImageService imageService;
+
 	
 	private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 	
@@ -43,8 +45,8 @@ public class ProductService {
         Product product = productMapper.toEntity(productDTO);
         if (image != null && !image.isEmpty()) {
             try {
-                String fileName = saveImage(image);
-                product.setImage("/images/" + fileName);
+                String imageUrl = imageService.uploadImage(image);
+                product.setImage(imageUrl);
             } catch (IOException e) {
                 throw new Exception("Error occurred while saving image: " + e.getMessage());
             }
@@ -82,8 +84,8 @@ public class ProductService {
         existingProduct.setCategory(category.get());
         if (image != null && !image.isEmpty()) {
             try {
-                String fileName = saveImage(image);
-                existingProduct.setImage("/images/" + fileName);
+                String imageUrl = imageService.uploadImage(image);
+                existingProduct.setImage(imageUrl);
             } catch (IOException e) {
                 throw new Exception("Error occurred while saving image: " + e.getMessage());
             }
