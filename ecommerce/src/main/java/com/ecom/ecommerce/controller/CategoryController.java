@@ -47,9 +47,9 @@ public class CategoryController {
 	
 	@DeleteMapping("/{categoryId}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) throws Exception{
+	public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) throws Exception{
 		categoryService.deleteCategory(categoryId);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().body("Deleted Successfuly");
 	}
 	
 	@GetMapping

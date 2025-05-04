@@ -3,6 +3,7 @@ package com.ecom.ecommerce.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -68,6 +69,12 @@ public class CategoryService {
 	
 		Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
+		
+		Optional<Category> existingCategory = categoryRepository.findFirstByName(categoryDTO.getName());
+
+		if (existingCategory.isPresent() && existingCategory.get().getId() != categoryDTO.getId()) {
+		    throw new Exception("Category name (" + categoryDTO.getName() + ") already exists");
+		}
 		
 		category.setName(categoryDTO.getName());
         if (image != null && !image.isEmpty()) {

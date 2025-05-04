@@ -84,7 +84,7 @@ public class OrderService {
 		try {
 			emailService.sendOrderConfirmation(savedOrder);
 		} catch (MailException e) {
-			logger.error("Failed to send order confirmation email for order ID :" +savedOrder.getId(), e);
+			logger.error("Failed to send order confirmation email for order ID : " +savedOrder.getId(), e);
 		}
 		return orderMapper.toDTO(savedOrder);
     }
@@ -92,13 +92,13 @@ public class OrderService {
 	public List<OrderItem> createOrderItems(Cart cart, Order order){
 		return cart.getItems().stream().map(cartItem-> {
 			Product product = productRepository.findById(cartItem.getProduct().getId())
-					.orElseThrow(()-> new EntityNotFoundException("Product not found with id :" +cartItem.getProduct().getId()));
+					.orElseThrow(()-> new EntityNotFoundException("Product not found with id : " +cartItem.getProduct().getId()));
 			
 			if(product.getQuantity() == 0) {
-				throw new IllegalStateException("product quantity is not set for product"+ product.getName());
+				throw new IllegalStateException("product quantity is not set for product " + product.getName());
 			}
 			if(product.getQuantity() < cartItem.getQuantity()) {
-				throw new IllegalStateException("not enough stock for product"+ product.getName());
+				throw new IllegalStateException("not enough stock for product "+ product.getName());
 			}
 			
 			product.setQuantity(product.getQuantity()-cartItem.getQuantity());

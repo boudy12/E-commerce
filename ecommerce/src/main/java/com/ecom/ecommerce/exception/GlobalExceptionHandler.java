@@ -10,6 +10,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.ecom.ecommerce.dto.ErrorDetials;
 
+import io.jsonwebtoken.ExpiredJwtException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -38,5 +40,13 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
 	}
+	
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<String> handleExpiredJwtException(ExpiredJwtException ex) {
+    	
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Your session has expired. Please login again.");
+    }
 	
 }

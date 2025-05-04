@@ -3,6 +3,7 @@ package com.ecom.ecommerce.service;
 import org.springframework.data.domain.Pageable;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -76,6 +77,9 @@ public class ProductService {
         existingProduct.setDescription(productDTO.getDescription());
         existingProduct.setPrice(productDTO.getPrice());
         existingProduct.setQuantity(productDTO.getQuantity());
+        
+        Optional<Category> category = categoryRepository.findById(productDTO.getCategoryId());
+        existingProduct.setCategory(category.get());
         if (image != null && !image.isEmpty()) {
             try {
                 String fileName = saveImage(image);

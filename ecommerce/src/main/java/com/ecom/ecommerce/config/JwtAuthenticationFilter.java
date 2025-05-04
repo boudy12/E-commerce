@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ecom.ecommerce.service.JwtService;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		try {
 		final String authorizationHeader = request.getHeader("Authorization");
 		
 		String jwt = null;
@@ -56,5 +58,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		
 		filterChain.doFilter(request, response);
 		
+	}catch (ExpiredJwtException ex) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"message\": \"Your session has expired. Please login again.\"}");
+    } catch (Exception ex) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"message\": \"Invalid token.\"}");
+        }
 	}
 }

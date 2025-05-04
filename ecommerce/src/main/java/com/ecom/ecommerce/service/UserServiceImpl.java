@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService{
 	public void confirmEmail(String email, String code) {
 		User user = userRepository.findByEmail(email).orElseThrow(
 				()-> new ResourceNotFoundException("User not found !"));
-		if(user.getConfirmationCode().equals(code)) {
+		if(code.equals(user.getConfirmationCode())) {
 			user.setConfirmationCode(null);
 			user.setEmailConfirmation(true);
 			userRepository.save(user);
